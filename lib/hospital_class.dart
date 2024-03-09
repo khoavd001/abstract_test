@@ -1,68 +1,74 @@
-// Abstract Factory Interface
-abstract class HealthcareManagementFactory {
-  PatientInformationSystem createPatientInformationSystem();
-  AppointmentSchedulingSystem createAppointmentSchedulingSystem();
-}
+// Product: Đối tượng cần được xây dựng
+class Computer {
+  String cpu;
+  String ram;
+  String storage;
+  String gpu;
 
-// Concrete Factories
-class HospitalFactory implements HealthcareManagementFactory {
-  @override
-  PatientInformationSystem createPatientInformationSystem() {
-    return ElectronicHealthRecord();
-  }
+  Computer(this.cpu, this.ram, this.storage, this.gpu);
 
-  @override
-  AppointmentSchedulingSystem createAppointmentSchedulingSystem() {
-    return HospitalAppointmentScheduler();
-  }
-}
-
-class FamilyClinicFactory implements HealthcareManagementFactory {
-  @override
-  PatientInformationSystem createPatientInformationSystem() {
-    return PaperHealthRecord();
-  }
-
-  @override
-  AppointmentSchedulingSystem createAppointmentSchedulingSystem() {
-    return FamilyClinicAppointmentScheduler();
+  void displayInfo() {
+    print("Computer Configuration:");
+    print("CPU: $cpu");
+    print("RAM: $ram");
+    print("Storage: $storage");
+    print("GPU: $gpu");
   }
 }
 
-// Abstract Products
-abstract class PatientInformationSystem {
-  void recordPatientInformation();
+// Abstract Builder: Interface cho Builder
+abstract class ComputerBuilder {
+  void buildCPU();
+  void buildRAM();
+  void buildStorage();
+  void buildGPU();
+  Computer getResult();
 }
 
-abstract class AppointmentSchedulingSystem {
-  void scheduleAppointment();
-}
+// Concrete Builder: Implement Builder
+class HighEndComputerBuilder implements ComputerBuilder {
+  Computer _computer = Computer("", "", "", "");
 
-// Concrete Products
-class ElectronicHealthRecord implements PatientInformationSystem {
   @override
-  void recordPatientInformation() {
-    print('Cài đặt cho hồ sơ điện tử');
+  void buildCPU() {
+    _computer.cpu = "Intel Core i9";
+  }
+
+  @override
+  void buildRAM() {
+    _computer.ram = "32GB DDR4";
+  }
+
+  @override
+  void buildStorage() {
+    _computer.storage = "1TB SSD";
+  }
+
+  @override
+  void buildGPU() {
+    _computer.gpu = "NVIDIA RTX 3080";
+  }
+
+  @override
+  Computer getResult() {
+    return _computer;
   }
 }
 
-class HospitalAppointmentScheduler implements AppointmentSchedulingSystem {
-  @override
-  void scheduleAppointment() {
-    print('Cài đặt cho lịch hẹn bệnh viện');
-  }
-}
+// Director: Quản lý quá trình xây dựng
+class ComputerDirector {
+  ComputerBuilder _builder;
 
-class PaperHealthRecord implements PatientInformationSystem {
-  @override
-  void recordPatientInformation() {
-    print('Cài đặt cho hồ sơ giấy');
-  }
-}
+  ComputerDirector(this._builder);
 
-class FamilyClinicAppointmentScheduler implements AppointmentSchedulingSystem {
-  @override
-  void scheduleAppointment() {
-    print('Cài đặt cho lịch hẹn phòng mạch gia đình');
+  void constructComputer() {
+    _builder.buildCPU();
+    _builder.buildRAM();
+    _builder.buildStorage();
+    _builder.buildGPU();
+  }
+
+  Computer getComputer() {
+    return _builder.getResult();
   }
 }

@@ -52,19 +52,19 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   int _counter = 0;
 
-  void _getMajorMethod(
-      HealthcareManagementFactory healthcareManagementFactory) {
-    var healthCareSchedule =
-        healthcareManagementFactory.createAppointmentSchedulingSystem();
-    var healthCareRecord =
-        healthcareManagementFactory.createPatientInformationSystem();
-    healthCareRecord.recordPatientInformation();
-    healthCareSchedule.scheduleAppointment();
+  void _buildComputer() {
+    ComputerBuilder builder = HighEndComputerBuilder();
+    ComputerDirector director = ComputerDirector(builder);
+    director.constructComputer();
+    Computer highEndComputer = director.getComputer();
+
+    // Hiển thị thông tin của máy tính
+    highEndComputer.displayInfo();
   }
 
   void _incrementCounter() {
     setState(() {
-      _getMajorMethod(HospitalFactory());
+      _buildComputer();
       _counter++;
     });
   }
